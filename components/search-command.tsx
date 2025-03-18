@@ -25,12 +25,10 @@ export function SearchCommand({
   const [open, setOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
 
-  // Filter tools based on search term
   const filteredTools = dockerTools.filter((tool) =>
     tool.name.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
-  // Handle keyboard shortcut to open dialog
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -39,7 +37,6 @@ export function SearchCommand({
       }
     }
 
-    // Listen for our custom event from the floating bar button
     const handleCustomTrigger = () => {
       setOpen((open) => !open)
     }
@@ -53,10 +50,8 @@ export function SearchCommand({
     }
   }, [])
 
-  // Handle tool selection with unsupported check
   const handleToolSelect = (toolId: string) => {
     const tool = dockerTools.find((t) => t.id === toolId)
-    // Only toggle selection if the tool is not marked as unsupported
     if (tool && !tool.isUnsupported) {
       onToggleToolSelection(toolId)
     }

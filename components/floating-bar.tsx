@@ -3,21 +3,21 @@
 import { SearchCommand } from "@/components/search-command"
 import type { DockerSettings } from "@/components/settings-panel"
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { Search } from "lucide-react"
@@ -82,14 +82,11 @@ export default function FloatingBar({
     setIsCopyDialogOpen(false)
   }
 
-  // Prevent rendering client-interactive elements during SSR
   const triggerSearchShortcut = (e: React.MouseEvent) => {
     if (!isMounted) return
 
     e.preventDefault()
 
-    // Use a custom event that the SearchCommand component will listen for
-    // Instead of trying to simulate a keyboard event
     const customEvent = new CustomEvent("triggerCommandK", {
       bubbles: true,
     })
@@ -152,132 +149,129 @@ export default function FloatingBar({
                     handleCopy()
                   }}
                 >
-                  Copy to Clipboard
+                  Copy
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </>
-      )}
 
-      <div
-        className={cn(
-          "z-30 w-full transition-all duration-300",
-          isFixed
-            ? "fixed top-0 right-0 left-0 bg-background/60 py-4 shadow-lg backdrop-blur-md"
-            : "relative mb-8 [animation-delay:450ms] motion-safe:animate-slide-down",
-        )}
-      >
-        <div
-          className={cn(
-            "container mx-auto w-full px-0",
-            isFixed && "max-w-7xl px-4",
-          )}
-        >
           <div
             className={cn(
-              isFixed ? "flex flex-col gap-4" : "flex flex-col gap-4",
+              "sticky bottom-0 left-0 right-0 z-10 flex transform-gpu items-center justify-between gap-4 bg-background p-4 shadow-lg transition-all",
+              isFixed
+                ? "rounded-t-none border-t"
+                : "rounded-lg border [animation-delay:200ms] motion-safe:animate-slide-up",
             )}
+            style={{
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+            }}
           >
-            <div
-              className={cn(
-                isFixed
-                  ? ""
-                  : "rounded-lg border border-border bg-background/40 p-4 shadow-lg backdrop-blur-md motion-safe:animate-slide-up",
-              )}
-            >
-              <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-lg">
-                      {selectedCount} tool{selectedCount !== 1 ? "s" : ""}{" "}
-                      selected
+            <div className="flex w-full items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={triggerSearchShortcut}
+                  className="hidden md:flex"
+                >
+                  <Search className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">
+                    Search&nbsp;
+                    <span className="hidden text-muted-foreground lg:inline-flex">
+                      tools...
                     </span>
+                  </span>
+                  <kbd className="pointer-events-none ml-auto hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 xl:flex">
+                    {isApple ? (
+                      <>
+                        <span className="text-xs">⌘</span>K
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-xs">Ctrl</span>K
+                      </>
+                    )}
+                  </kbd>
+                </Button>
+
+                <div>
+                  <h3 className="text-sm font-medium">
+                    Selected: <span className="font-bold">{selectedCount}</span>
+                  </h3>
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {selectedTools.length > 0 && (
+                      <p className="hidden lg:flex">
+                        {selectedTools.slice(0, 3).join(", ")}
+                        {selectedTools.length > 3 && (
+                          <Badge
+                            variant="outline"
+                            className="ml-1 rounded-md px-1.5 font-normal text-xs"
+                          >
+                            +{selectedTools.length - 3} more
+                          </Badge>
+                        )}
+                      </p>
+                    )}
                   </div>
-
-                  {selectedCount > 0 && (
-                    <div className="mt-2 flex max-w-[600px] flex-wrap gap-1.5">
-                      {selectedTools.slice(0, 4).map((tool, index) => (
-                        <Badge
-                          key={tool}
-                          variant="outline"
-                          className="h-5 bg-primary/5 py-0 text-xs hover:bg-primary/10"
-                          style={{ animationDelay: `${index * 50}ms` }}
-                        >
-                          {tool}
-                        </Badge>
-                      ))}
-
-                      {selectedTools.length > 4 && (
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Badge
-                              variant="outline"
-                              className="h-5 cursor-pointer bg-primary/5 py-0 text-xs hover:bg-primary/10"
-                              style={{ animationDelay: `${4 * 50}ms` }}
-                            >
-                              +{selectedTools.length - 4} others
-                            </Badge>
-                          </PopoverTrigger>
-                          <PopoverContent className="max-h-[300px] w-auto overflow-y-auto p-0">
-                            <div className="flex flex-col gap-1 p-2">
-                              {selectedTools.slice(4).map((tool) => (
-                                <div
-                                  key={tool}
-                                  className="rounded-sm px-2 py-1 text-sm hover:bg-muted"
-                                >
-                                  {tool}
-                                </div>
-                              ))}
-                            </div>
-                          </PopoverContent>
-                        </Popover>
-                      )}
-                    </div>
-                  )}
                 </div>
+              </div>
 
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-2 transition-transform motion-safe:hover:scale-105"
-                    onClick={triggerSearchShortcut}
-                  >
-                    <Search className="h-3.5 w-3.5" />
-                    <span>Search</span>
-                    <kbd className="pointer-events-none ml-1 inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-medium font-mono text-[10px] text-muted-foreground opacity-100">
-                      <span className="text-xs">
-                        {isMounted ? (isApple ? "⌘" : "Ctrl") : "⌘"}
-                      </span>
-                      K
-                    </kbd>
-                  </Button>
-
-                  {onReset && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setIsResetDialogOpen(true)}
-                      className="transition-transform motion-safe:hover:scale-105"
+              <div className="flex items-center gap-2">
+                <div className="text-right">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className={cn("flex-shrink-0")}
+                        disabled={selectedCount === 0}
+                      >
+                        Generate
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      align="end"
+                      className="w-72 p-3 text-sm sm:w-80"
                     >
-                      Reset All
-                    </Button>
-                  )}
-                  <Button
-                    disabled={selectedCount === 0}
-                    size="sm"
-                    className="hover:motion-preset-confetti font-semibold"
-                    onClick={() => setIsCopyDialogOpen(true)}
-                  >
-                    Copy Compose
-                  </Button>
+                      <div className="space-y-3">
+                        <h4 className="font-medium">
+                          Your docker-compose.yaml is ready!
+                        </h4>
+                        <p className="text-muted-foreground">
+                          Copy the configuration by clicking the button below, or
+                          click outside to close.
+                        </p>
+                        <div className="grid gap-2">
+                          <Button
+                            onClick={() => {
+                              posthog.capture("copy_configuration_clicked", {
+                                selected_tools: selectedTools,
+                                settings: settings,
+                              })
+                              setIsCopyDialogOpen(true)
+                            }}
+                            className="w-full"
+                          >
+                            Copy Configuration
+                          </Button>
+                          <Button
+                            variant="outline"
+                            className="w-full"
+                            onClick={() => setIsResetDialogOpen(true)}
+                          >
+                            Reset All
+                          </Button>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </>
   )
 }

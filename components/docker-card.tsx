@@ -3,9 +3,9 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import type { DockerTool } from "@/lib/docker-tools"
 import { cn } from "@/lib/utils"
@@ -68,7 +68,6 @@ export default function DockerCard({
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Don't select the card if clicking on the GitHub icon, description expand button, or if the container is unsupported
     if (
       (e.target as Element).closest(".github-link") ||
       (e.target as Element).closest(".description-expand") ||
