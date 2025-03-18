@@ -3,21 +3,21 @@
 import { SearchCommand } from "@/components/search-command"
 import type { DockerSettings } from "@/components/settings-panel"
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { Search } from "lucide-react"
@@ -201,7 +201,7 @@ export default function FloatingBar({
                   </h3>
                   <div className="mt-1 flex flex-wrap gap-1">
                     {selectedTools.length > 0 && (
-                      <p className="hidden lg:flex">
+                      <div className="hidden lg:flex">
                         {selectedTools.slice(0, 3).join(", ")}
                         {selectedTools.length > 3 && (
                           <Badge
@@ -211,7 +211,7 @@ export default function FloatingBar({
                             +{selectedTools.length - 3} more
                           </Badge>
                         )}
-                      </p>
+                      </div>
                     )}
                   </div>
                 </div>
