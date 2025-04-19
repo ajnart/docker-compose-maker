@@ -346,7 +346,7 @@ export const other: DockerTool[] = [
     category: "Productivity",
     tags: ["Cooking", "Recipes", "Food"],
     githubUrl: "https://github.com/vabene1111/recipes",
-    icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/tandoor.svg",
+    icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/tandoor-recipes.svg",
     composeContent: `services:
   tandoor:
     image: vabene1111/recipes:latest
